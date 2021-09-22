@@ -53,16 +53,27 @@ class Hangman
 
   def player_input
     # get player input
+    puts 'Make an input consisting of a single alphabetic character'
     player_input = gets.chomp
     # validate player input
-    player_input unless player_input_valid?(player_input) == true
+    player_input = retake_player_input unless player_input_valid?(player_input) == true
     update_board(compare_player_input(player_input), player_input)
     display_board
   end
 
+  def retake_player_input
+    puts 'MAKE AN INPUT CONSISTING OF ONLY A SINGULAR ALPHABETIC CHARACTER'
+    player_input = gets.chomp
+    if player_input_valid?(player_input)
+      player_input
+    else
+      retake_player_input
+    end
+  end
+
   def player_input_valid?(player_input)
     test_results = []
-    test_results << player_input.length == 1
+    test_results << (player_input.length == 1)
     test_results << /^[a-z]+$/i.match?(player_input)
     test_results.all?(true)
   end
@@ -70,6 +81,7 @@ class Hangman
   def compare_player_input(player_input)
     /[#{player_input}]/i.match?(@secret_word)
   end
+  # what is this supposed to do lol
 
   def update_board(comparison_results, player_input)
     if comparison_results == false
@@ -90,7 +102,3 @@ class Hangman
     result_array
   end
 end
-
-binding.pry
-
-something = 'something'
